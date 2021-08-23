@@ -1,0 +1,61 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Merriweather", serif;
+  background-color: #ebf2ff;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  z-index: 999;
+}
+.navbar__brand {
+  width: 100px;
+}
+.brand__logo {
+  width: 100%;
+}
+
+.navbar__nav__items {
+  display: flex;
+}
+.button__primary {
+  background-image: linear-gradient(to right, red 0%, blue 50%, purple 100%);
+  margin: 10px;
+  /* width: 200px; */
+  padding: 0.5rem 1rem;
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  box-shadow: 0 0 10px pink;
+  background-color: red;
+  display: block;
+  transition: background-image 0.5s ease;
+}
+
+.button__primary:hover {
+  background-image: linear-gradient(to left, red 0%, blue 50%, purple 100%);
+  transition: background-image 0.5s ease;
+  /* width: 200px; */
+}
+
+@media (min-width: 1200px) {
+  .navbar {
+    padding: 0 3rem;
+  }
+
+  .button__primary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}
