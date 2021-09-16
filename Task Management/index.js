@@ -1,16 +1,18 @@
-const addcard=()=>{
-    const newtaskDetails={
-        id: `${Date.now()}`,
-        url: document.getElementById("imageURL").value,
-        title: document.getElementById("taskTitle").value,
-        type: document.getElementById("taskType").value,
-        description: document.getElementById("taskDescription").value
-    };
-    
+const addcard = () => {
+
+  const newtaskDetails = {
+    id: `${Date.now()}`,
+    url: document.getElementById("imageURL").value,
+    title: document.getElementById("taskTitle").value,
+    type: document.getElementById("taskType").value,
+    description: document.getElementById("taskDescription").value
+  };
+  taskContents = document.getElementById("taskContents");
+  taskContents.insertAdjacentHTML('beforeend', generateTaskCard(newtaskDetails));
 }
 
-const generateTaskCard=({id,url,title,type,description})=>
-    `<div class="col-6 col-md-6 col-lg-4 mt-3" id=${id} key=${id}>
+const generateTaskCard = ({ id, url, title, type, description }) =>
+  `<div class="col-6 col-md-6 col-lg-4 mt-3" id=${id} key=${id}>
     <div class="card">
       <div class="card-header">
         <div class="d-flex justify-content-end">
