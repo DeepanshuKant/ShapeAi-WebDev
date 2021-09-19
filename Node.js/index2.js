@@ -1,0 +1,1 @@
+const myImportModule = require("./index");
