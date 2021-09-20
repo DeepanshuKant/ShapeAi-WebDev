@@ -33,7 +33,7 @@ const generateTaskCard = ({ id, url, title, type, description }) =>
         </div>
       </div>
 
-      <img src=${url} class="card-img-top" alt="image" />
+      <img src=${url} class="card-img-top" alt="image" name=${url} />
 
       <div class="card-body">
         <h5 class="card-title">${title}</h5>
@@ -41,7 +41,7 @@ const generateTaskCard = ({ id, url, title, type, description }) =>
         <span class="badge bg-primary">${type}</span>
       </div>
       <div class="card-footer">
-        <button class="btn btn-outline-primary float-end">
+        <button class="btn btn-outline-primary float-end" imageee=${id}>
           Open task
         </button>
       </div>
@@ -55,7 +55,7 @@ const saveToLocalStorage = () => {
 
 const reloadTaskCard = () => {
   const localStorageCopy = JSON.parse(localStorage.getItem("tasky"));
-  console.log(localStorageCopy)
+  // console.log(localStorageCopy)
   if (localStorageCopy) {
     globalTaskData = localStorageCopy.tasks;
   }
@@ -88,11 +88,13 @@ const editCard = (e) => {
   // console.log(e.parentNode.parentNode.parentNode.childNodes[7].childNodes[1])
 
   e.parentNode.parentNode.parentNode.childNodes[7].childNodes[1].setAttribute("onclick", "saveEditTask(this)")
-  e.parentNode.parentNode.parentNode.childNodes[7].childNodes[1].style.setProperty("background", "green")
+  // e.parentNode.parentNode.parentNode.childNodes[7].childNodes[1].style.setProperty("background", "green")
   e.parentNode.parentNode.parentNode.childNodes[7].childNodes[1].innerHTML = "Save Changes";
 
 }
 const saveEditTask = (e) => {
+  console.log(e.parentNode.parentNode.childNodes[3].childNodes[1])
+
 
   const newtaskDetails = {
     id: `${Date.now()}`,
@@ -101,10 +103,9 @@ const saveEditTask = (e) => {
     type: document.getElementById("taskType").value,
     description: document.getElementById("taskDescription").value
   };
-  globalTaskData.slice(newtaskDetails)
-  saveToLocalStorage();
-  const localStorageCopy = JSON.parse(localStorage.getItem("tasky"));
-  console.log(localStorageCopy)
+
+  let idd = document.getElementById("IDofcCard")
+  idd.innerHTML = newtaskDetails.id;
 
 }
 
