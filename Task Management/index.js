@@ -93,19 +93,7 @@ const editCard = (e) => {
 
 }
 const saveEditTask = (e) => {
-  console.log(e.parentNode.parentNode.childNodes[3].childNodes[1])
 
-
-  const newtaskDetails = {
-    id: `${Date.now()}`,
-    url: document.getElementById("imageURL").value,
-    title: document.getElementById("taskTitle").value,
-    type: document.getElementById("taskType").value,
-    description: document.getElementById("taskDescription").value
-  };
-
-  let idd = document.getElementById("IDofcCard")
-  idd.innerHTML = newtaskDetails.id;
 
 }
 
