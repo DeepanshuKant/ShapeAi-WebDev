@@ -125,6 +125,50 @@ app.post("/publications", (req, res) => {
     return res.json(db.publications)
 })
 
+
+app.put("/book-update/:isbn", (req, res) => {
+    const { isbn } = req.params
+    db.books.forEach((book) => {
+
+        if (book.ISBN === isbn) {
+            console.log({ ...book, ...req.body })
+            return { ...book, ...req.body }
+        }
+        return book;
+    })
+    return res.json(db.books)
+
+})
+
+app.put("/author-update/:id", (req, res) => {
+
+    let { id } = req.params;
+    id = Number(id)
+    db.authors.forEach((author) => {
+        if (author.id === id) {
+            console.log({ ...author, ...req.body })
+            return { ...author, ...req.body }
+        }
+        return author;
+    })
+    return res.json(db.authors)
+})
+app.put("/publication-update/:id", (req, res) => {
+
+    let { id } = req.params;
+    id = Number(id);
+    db.publications.forEach((publication) => {
+
+        if (publication.id === id) {
+            console.log({ ...publication, ...req.body })
+            return { ...publication, ...req.body }
+        }
+        return publication
+    })
+    return res.json(db.publications)
+
+})
+
 app.listen(3000, () => {
     console.log("My Express is running.......")
 });
