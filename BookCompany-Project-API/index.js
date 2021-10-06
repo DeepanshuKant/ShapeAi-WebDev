@@ -1,14 +1,55 @@
 const db = require("./DataBase/index.js");
-
+const BookModel = require("./DataBase/books.js");
+const AuthorModel = require('./DataBase/authors.js');
+const PublicationsModel = require("./DataBase/publications.js");
 // console.log(db.books)
 // console.log(db.authors)
 // console.log(db.publications)
 
-
+//Express thing------------------------------------------------------------------------------
 const express = require("express")
-
 const app = express();
 app.use(express.json()) //Use to Post request from Postman
+
+//Import the mongoose module-----------------------------------------------------------
+var mongoose = require('mongoose');
+//Set up default mongoose connection
+var mongoDB = 'mongodb+srv://CheeseMaster_69:seabirdkant1A@cluster0.5crnt.mongodb.net/Book-Company?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log("CONNECTION ESTABLISHED"));
+
+
+// const { MongoClient } = require('mongodb');
+// const uri = "mongodb+srv://CheeseMaster_69:seabirdkant1A@cluster0.5crnt.mongodb.net/Book-Company?retryWrites=true&w=majority";
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+// client.connect(err => {
+//     const bcollection = client.db("Book-Company").collection("books").findOne({ ISBN: "12345Two" });
+//     bcollection.then((data) => console.log(data)).catch((err) => console.log(err))
+// });
+// client.close();
+
+
+// async function listDatabases(client) {
+//     databasesList = await client.db().admin().listDatabases();
+//     console.log("THE DATABASES ARE:");
+//     databasesList.databases.forEach(db => console.log(db.name));
+// }
+// async function main() {
+//     const uri = "mongodb+srv://CheeseMaster_69:seabirdkant1A@cluster0.5crnt.mongodb.net/Book-Company?retryWrites=true&w=majority";
+//     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+//     try {
+//         await client.connect();
+//         const result = await client.db("Book-Company").collection("books").findOne({ ISBN: "12345Two" });
+//         console.log(result);
+//         await listDatabases(client);
+//     }
+//     catch (err) {
+//         console.log(err);
+//     }
+//     finally {
+//         await client.close();
+//     }
+// }
+// main();
 
 
 //All get Methods down below-------------------------------------------------------------------------
@@ -17,18 +58,20 @@ app.get("/", (req, res) => {
     return res.json({ "Welcome": ` to my backend software for the book company` })
 })
 
-app.get("/books", (req, res) => {
-    const getAllBooks = db.books;
+app.get("/books", async (req, res) => {
+    const getAllBooks = await BookModel.find();
     return res.json(getAllBooks)
 })
 
 
 //By using isbn only
-app.get("/book/:isbn", (req, res) => {
+app.get("/book/:isbn", async (req, res) => {
     const { isbn } = req.params;
-    const getSpecificBook = db.books.filter((book) => book.ISBN === isbn)
+    // const getSpecificBook = db.books.filter((book) => book.ISBN === isbn)
+    //by using mongoDB
+    const getSpecificBook = await BookModel.findOne({ ISBN: isbn })
 
-    if (getSpecificBook.length === 0) {
+    if (getSpecificBook.length === null) {
         return res.json({ "error": 'No book found with this ISBN of ${isbn}' })
     }
     else {
@@ -37,15 +80,16 @@ app.get("/book/:isbn", (req, res) => {
     }
 })
 
-app.get("/book-category/:category", (req, res) => {
+app.get("/book-category/:category", async (req, res) => {
 
     // // console.log(req.params);
     const { category } = req.params;
     // // console.log(isbn);
-    const getSpecificBooks = db.books.filter((book) => book.category.includes(category));
+    // const getSpecificBooks = db.books.filter((book) => book.category.includes(category));
+    const getSpecificBooks = await BookModel.find({ category: category })
     // // console.log(getSpecificBook);
     // // console.log(getSpecificBook.length);
-    if (getSpecificBooks.length === 0) {
+    if (getSpecificBooks.length === null) {
         return res.json({ "error": `No Books found for the category of ${category}` });
     }
     return res.json(getSpecificBooks);
@@ -168,7 +212,54 @@ app.put("/publication-update/:id", (req, res) => {
     return res.json(db.publications)
 
 })
+app.delete("/book-delete/:isbn", (req, res) => {
 
+    const { isbn } = req.params;
+    let filteredBooks = db.books.filter((book) => book.ISBN !== isbn)
+
+    console.log(filteredBooks)
+    db.books = filteredBooks
+    return res.json(db.books)
+})
+
+app.delete("/book-author-delete/:isbn/:id", (req, res) => {
+    let { isbn, id } = req.params
+    id = Number(id);
+
+    db.books.forEach((book) => {
+
+        if (book.ISBN === isbn) {
+
+            if (!book.authors.includes(id)) {
+
+                return
+            }
+            book.authors = book.authors.filter((author) => author !== id)
+            return book;
+        }
+        return book;
+    })
+    return res.json(db.books)
+})
+
+app.delete("/author-book-delete/:id/:isbn", (req, res) => {
+    let { id, isbn } = req.params
+    id = Number(id);
+
+    db.authors.forEach((author) => {
+
+        if (author.id === id) {
+            if (!author.books.includes(isbn)) {
+                return;
+            }
+            author.books = author.books.filter((book) => book !== isbn)
+            return author;
+        }
+        return author;
+    })
+    return res.json(db.authors)
+
+})
 app.listen(3000, () => {
     console.log("My Express is running.......")
 });
