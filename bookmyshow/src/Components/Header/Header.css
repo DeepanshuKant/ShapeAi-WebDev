@@ -1,0 +1,31 @@
+.main__container{
+    width: 80%;
+    display: flex;
+    justify-content: flex-start;
+}
+.border{
+    border: 1px solid white;
+}
+.search__box{
+    display: flex;
+    /* border: 1px solid red; */
+    /* width: 100%; */
+    /* justify-content: flex-start; */
+    align-items: flex-start;
+
+}
+.search__bar{
+    display: flex;
+    width: 50%;
+}
+.items__list{
+    padding: 10px;
+    text-decoration: none;
+    color: rgb(179, 179, 179);
+    transition: all .2s ease;
+}
+.items__list:hover{
+    color: white;
+    cursor: pointer;
+    transition: all .2s ease;
+}
